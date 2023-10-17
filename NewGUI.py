@@ -40,6 +40,7 @@ def record_audio(output_folder, samplerate, record_sec, clip_number, pause_event
         time.sleep(1)
 
 def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_event):
+    loop_number = 1
     for clip_number in range(1, num_clips + 1):
         delete_old_audio_files(output_folder)  # Delete old files before starting a new loop
 
@@ -55,9 +56,10 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
 
         notification.notify(
             title="Audio Recording Status",
-            message=f"Loop number completed",
+            message=f"Loop number {loop_number} completed",
             app_name="MyAudioApp"
         )
+        loop_number += 1
 
 output_folder = r'D:/Realtimerecording'
 
