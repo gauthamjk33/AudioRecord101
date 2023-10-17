@@ -137,10 +137,10 @@ while True:
             message="Application reset successful",
             app_name="MyAudioApp"
         )
-        recording_thread_started = False  # Reset the recording flag
-        pause_event.set()  # Set pause_event to break out of the loop
-        delete_old_audio_files(output_folder)  # Delete any existing audio files
+        recording_thread_started = False  
+        pause_event.set()  
+        delete_old_audio_files(output_folder)  
         window['status'].update('Ready', text_color='green')
-        pause_event.clear()  # Clear pause_event to allow recording to start a new loop
+        pause_event.clear()  
 
 window.close()
