@@ -14,6 +14,7 @@
 	-"Recording process resumed" when the user resumes recording.
 	-"Recording has ended" when the user stops the recording.
 	-"App closed" Code exists successfully with exit code 0.
+	-"Reset" when the user pauses the recording and hits reset, it should break the loop and the user should start recording again, starting a new loop of audio files.
 
 -[Looped Recording]: This application features looped recording, where it repeatedly records and overwrites the same file, making it useful for scenarios where you need the most 	recent 	audio data continuously. (New addition)
 
