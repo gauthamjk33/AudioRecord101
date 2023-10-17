@@ -41,18 +41,12 @@ def record_audio(output_folder, samplerate, record_sec, clip_number, pause_event
 
 def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_event):
     loop_number = 1
-    for clip_number in range(1, num_clips + 1):
+    while True:
         delete_old_audio_files(output_folder)  # Delete old files before starting a new loop
 
-        for clip in range(1, num_clips + 1):
-            if pause_event.is_set():
-                break
-
-            record_audio(output_folder, samplerate, record_sec, clip, pause_event)
+        for clip_number in range(1, num_clips + 1):
+            record_audio(output_folder, samplerate, record_sec, clip_number, pause_event)
             time.sleep(1)  # Sleep for 1 second between recordings
-
-        if pause_event.is_set():
-            break
 
         notification.notify(
             title="Audio Recording Status",
@@ -69,6 +63,15 @@ if not os.path.exists(output_folder):
 samplerate = 48000
 record_sec = 5
 num_clips = 5
+
+# Define the update_timer function
+def update_timer(start_time):
+    current_time = datetime.now()
+    elapsed_time = current_time - start_time
+    elapsed_seconds = int(elapsed_time.total_seconds())
+    formatted_time = f"Time Open: {elapsed_seconds} seconds"
+    current_datetime = current_time.strftime("Date: %Y-%m-%d Time: %H:%M:%S")
+    return f"{formatted_time}\n{current_datetime}"
 
 layout = [
     [sg.Text("Recording Status", text_color='green', font=('Helvetica', 18), key='status')],
@@ -144,5 +147,8 @@ while True:
         delete_old_audio_files(output_folder)  
         window['status'].update('Ready', text_color='green')
         pause_event.clear()  
+
+    # Call update_timer and update the timer field
+    window['timer'].update(update_timer(start_time))
 
 window.close()
