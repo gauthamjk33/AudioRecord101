@@ -77,11 +77,12 @@ layout = [
     [sg.Text("Recording Status", text_color='green', font=('Helvetica', 18), key='status')],
     [sg.Text('', size=(40, 2), key='timer', justification='right')],
     [sg.Button("Start", size=(7, 1)), sg.Button("Pause", size=(7, 1)), sg.Button("Resume", size=(7, 1)),
-     sg.Button("Stop", size=(7, 1)), sg.Button("Reset", size=(7, 1))],  # Add the "Reset" button
+     sg.Button("Stop", size=(7, 1)), sg.Button("Reset", size=(7, 1)), sg.Button("Edit", size=(7, 1))],
+     [sg.Text(f'Clips set to {num_clips} clips', key='clip_count')]
 ]
 
 window = sg.Window("Fake Voice Alert", layout, finalize=True, return_keyboard_events=True,
-                   location=(100, 100), size=(400, 200))
+                   location=(150, 150), size=(500, 250))
 start_time = datetime.now()
 
 recording_thread_started = False
@@ -108,7 +109,7 @@ while True:
         recording_thread_started = True
         recording_thread = threading.Thread(target=record_audio_batch,
                                             args=(output_folder, samplerate, record_sec, num_clips, pause_event))
-        recording_thread.daemon = True  # Set the thread as a daemon
+        recording_thread.daemon = True
         recording_thread.start()
 
     if event == 'Pause':
@@ -135,18 +136,39 @@ while True:
 
         pause_event.clear()
 
-    if event == 'Reset':  # Handle the "Reset" button click event
-        window['status'].update('Resetting...', text_color='red') 
+    if event == 'Reset':
+        window['status'].update('Resetting...', text_color='red')
         notification.notify(
             title="Audio Recording Status",
             message="Application reset successful",
             app_name="MyAudioApp"
         )
-        recording_thread_started = False  
-        pause_event.set()  
-        delete_old_audio_files(output_folder)  
+        recording_thread_started = False
+        pause_event.set()
+        delete_old_audio_files(output_folder)
         window['status'].update('Ready', text_color='green')
-        pause_event.clear()  
+        pause_event.clear()
+
+    #Edit the number of clips
+    if event == 'Edit':
+        layout_edit = [[sg.Text('Enter number of clips:'), sg.Input(key='-IN-', enable_events=True)],
+                       [sg.Button('Save')]]
+        window_edit = sg.Window('Edit Number of Clips', layout_edit)
+        while True:
+            event_edit, values_edit = window_edit.read()
+            if event_edit == sg.WINDOW_CLOSED or event_edit == 'Save':
+                try:
+                    num_clips = int(values_edit['-IN-'])
+                    window['clip_count'].update(f'Clips set to {num_clips} clips')
+                    notification.notify(
+                        title="Audio Recording Status",
+                        message="Changes saved",
+                        app_name="MyAudioApp"
+                    )
+                except ValueError:
+                    sg.popup('Please enter an integer value')
+                break
+        window_edit.close()
 
     # Call update_timer and update the timer field
     window['timer'].update(update_timer(start_time))
