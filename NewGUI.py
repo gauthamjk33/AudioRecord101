@@ -45,8 +45,13 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
         delete_old_audio_files(output_folder)  # Delete old files before starting a new loop
 
         for clip_number in range(1, num_clips + 1):
+            if pause_event.is_set():
+                break
             record_audio(output_folder, samplerate, record_sec, clip_number, pause_event)
             time.sleep(1)  # Sleep for 1 second between recordings
+
+        if pause_event.is_set():
+            break
 
         notification.notify(
             title="Audio Recording Status",
