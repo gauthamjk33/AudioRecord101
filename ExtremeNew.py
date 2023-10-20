@@ -44,12 +44,11 @@ def record_audio(output_folder, samplerate, record_sec, clip_number, pause_event
     while pause_event.is_set():
         time.sleep(1)
 
-# Function to count audio files in the output folder
+
 def count_audio_files(output_folder):
     audio_files = glob.glob(os.path.join(output_folder, '*.wav'))
     return len(audio_files)
 
-# ... (rest of the code)
 def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_event):
     loop_number = 1
     while True:
@@ -110,11 +109,10 @@ while True:
     if event == sg.WIN_CLOSED or event == 'Stop':
         window['status'].update('Recording has ended', text_color='red')
         time.sleep(5)
-        window['status'].update('Analysing the recorded clips', text_color='red')
+        window['status'].update('Analyzing the recorded clips', text_color='red')
 
-        # Count the audio files and display a notification
         num_recorded_files = count_audio_files(output_folder)
-        notification_message = f"Recording has ended. Total audio files recorded: {num_recorded_files}"
+        notification_message = f"Recording has ended. Total audio files recorded in this loop: {num_recorded_files}"
         notification.notify(
             title="Recording Ended",
             message=notification_message,
