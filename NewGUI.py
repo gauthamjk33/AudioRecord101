@@ -39,6 +39,13 @@ def record_audio(output_folder, samplerate, record_sec, clip_number, pause_event
     while pause_event.is_set():
         time.sleep(1)
 
+# State changes to analysing the recorded audio clips
+def analyze_clips(loop_number, num_clips):
+    # Add the analysis code here (model)
+    print(f"Analyzing {num_clips} clips from loop {loop_number}")
+    time.sleep(15)  # Simulate time taken for analysis
+    print("Analysis done")
+
 def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_event):
     loop_number = 1
     while True:
@@ -58,6 +65,23 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
             message=f"Loop number {loop_number} completed",
             app_name="MyAudioApp"
         )
+
+        window['status'].update(f'Recordings from loop {loop_number} analyzing', text_color='yellow')
+        notification.notify(
+            title="Audio Recording Status",
+            message=f"{num_clips} clips from loop {loop_number} being analyzed",
+            app_name="MyAudioApp"
+        )
+
+        analyze_clips(loop_number, num_clips)
+
+        window['status'].update('Analysis done', text_color='green')
+        notification.notify(
+            title="Audio Recording Status",
+            message="Analysis done",
+            app_name="MyAudioApp"
+        )
+
         loop_number += 1
 
 output_folder = r'D:/Realtimerecording'
@@ -82,7 +106,7 @@ layout = [
     [sg.Text("Recording Status", text_color='green', font=('Helvetica', 18), key='status')],
     [sg.Text('', size=(40, 2), key='timer', justification='right')],
     [sg.Button("Start", size=(7, 1)), sg.Button("Pause", size=(7, 1)), sg.Button("Resume", size=(7, 1)),
-     sg.Button("Stop", size=(7, 1)), sg.Button("Reset", size=(7, 1)), sg.Button("Edit", size=(7, 1))],
+     sg.Button("Exit", size=(7, 1)), sg.Button("Reset", size=(7, 1)), sg.Button("Edit", size=(7, 1))],
      [sg.Text(f'Clips set to {num_clips} clips', key='clip_count')]
 ]
 
@@ -96,7 +120,7 @@ pause_event = threading.Event()
 while True:
     event, values = window.read(timeout=1000)
 
-    if event == sg.WIN_CLOSED or event == 'Stop':
+    if event == sg.WIN_CLOSED or event == 'Exit':
         window['status'].update('Recording has ended', text_color='red')
         time.sleep(5)
         window['status'].update('Analysing the recorded clips', text_color='red')
