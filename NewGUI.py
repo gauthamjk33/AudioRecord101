@@ -21,7 +21,12 @@ def delete_old_audio_files(output_folder):
 def record_audio(output_folder, samplerate, record_sec, clip_number, pause_event):
     try:
         default_playback_device_id = str(sc.default_speaker().name)
-        output_file_name = os.path.join(output_folder, f'clip_{clip_number}.wav')
+
+        # Generate a unique identifier based on the current timestamp
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S%f')
+
+        # Create a filename with the unique identifier and clip number
+        output_file_name = os.path.join(output_folder, f'clip_{clip_number}_{timestamp}.wav')
 
         with sc.get_microphone(id=default_playback_device_id, include_loopback=True).recorder(
                 samplerate=samplerate) as mic:
