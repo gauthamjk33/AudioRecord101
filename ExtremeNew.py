@@ -6,7 +6,6 @@ from plyer import notification
 import soundcard as sc
 import soundfile as sf
 import PySimpleGUI as sg
-import glob  # Added for file count
 
 # Function to delete old audio files in the specified output folder
 def delete_old_audio_files(output_folder):
@@ -41,12 +40,19 @@ def record_audio(output_folder, samplerate, record_sec, clip_number, pause_event
     except Exception as e:
         print("An error occurred:", str(e))
 
+    # Wait here if pause event is set
     while pause_event.is_set():
         time.sleep(1)
 
+# State changes to analysing the recorded audio clips
+def analyze_clips(loop_number, num_clips):
+    # Add the analysis code here (model)
+    print(f"Analyzing {num_clips} clips from loop {loop_number}")
+    time.sleep(15)  # Simulate time taken for analysis
+    print("Analysis done")
 
 def count_audio_files(output_folder):
-    audio_files = glob.glob(os.path.join(output_folder, '*.wav'))
+    audio_files = [filename for filename in os.listdir(output_folder) if filename.endswith('.wav')]
     return len(audio_files)
 
 def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_event):
@@ -68,9 +74,30 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
             message=f"Loop number {loop_number} completed",
             app_name="MyAudioApp"
         )
+
+        window['status'].update(f'Recordings from loop {loop_number} analyzing', text_color='yellow')
+        notification.notify(
+            title="Audio Recording Status",
+            message=f"{num_clips} clips from loop {loop_number} being analyzed",
+            app_name="MyAudioApp"
+        )
+
+        analyze_clips(loop_number, num_clips)
+
+        window['status'].update('Analysis done', text_color='green')
+        notification.notify(
+            title="Audio Recording Status",
+            message="Analysis done",
+            app_name="MyAudioApp"
+
+            
+        )
+        num_audio_files = count_audio_files(output_folder)
+        print(f"Number of audio files in {output_folder} after loop {loop_number}: {num_audio_files}")
+
         loop_number += 1
 
-output_folder = os.path.expanduser('~/MyAudioApp/Audio')
+output_folder = r'D:/Realtimerecording'
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
@@ -92,7 +119,7 @@ layout = [
     [sg.Text("Recording Status", text_color='green', font=('Helvetica', 18), key='status')],
     [sg.Text('', size=(40, 2), key='timer', justification='right')],
     [sg.Button("Start", size=(7, 1)), sg.Button("Pause", size=(7, 1)), sg.Button("Resume", size=(7, 1)),
-     sg.Button("Stop", size=(7, 1)), sg.Button("Reset", size=(7, 1)), sg.Button("Edit Clip Amount", size=(15, 1))],
+     sg.Button("Exit", size=(7, 1)), sg.Button("Reset", size=(7, 1)), sg.Button("Edit", size=(7, 1))],
      [sg.Text(f'Clips set to {num_clips} clips', key='clip_count')]
 ]
 
@@ -106,18 +133,10 @@ pause_event = threading.Event()
 while True:
     event, values = window.read(timeout=1000)
 
-    if event == sg.WIN_CLOSED or event == 'Stop':
+    if event == sg.WIN_CLOSED or event == 'Exit':
         window['status'].update('Recording has ended', text_color='red')
         time.sleep(5)
-        window['status'].update('Analyzing the recorded clips', text_color='red')
-
-        num_recorded_files = count_audio_files(output_folder)
-        notification_message = f"Recording has ended. Total audio files recorded in this loop: {num_recorded_files}"
-        notification.notify(
-            title="Recording Ended",
-            message=notification_message,
-            app_name="MyAudioApp"
-        )
+        window['status'].update('Analysing the recorded clips', text_color='red')
 
         # Show a toast notification when application is closed
         notification.notify(
@@ -173,7 +192,7 @@ while True:
         pause_event.clear()
 
     #Edit the number of clips
-    if event == 'Edit Clip Amount':
+    if event == 'Edit':
         layout_edit = [[sg.Text('Enter number of clips:'), sg.Input(key='-IN-', enable_events=True)],
                        [sg.Button('Save')]]
         window_edit = sg.Window('Edit Number of Clips', layout_edit)
@@ -197,4 +216,3 @@ while True:
     window['timer'].update(update_timer(start_time))
 
 window.close()
-
