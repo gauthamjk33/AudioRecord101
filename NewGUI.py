@@ -89,7 +89,7 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
 
         loop_number += 1
 
-output_folder = r'D:/Realtimerecording'
+output_folder = os.path.expanduser('~/MyAudioApp/Audio')
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
