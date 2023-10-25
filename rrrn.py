@@ -7,7 +7,6 @@ import soundcard as sc
 import soundfile as sf
 import PySimpleGUI as sg
 import joblib
-import librosa
 
 # Function to delete old audio files in the specified output folder
 def delete_old_audio_files(output_folder):
@@ -45,19 +44,12 @@ def record_audio(output_folder, samplerate, record_sec, clip_number, pause_event
     # Wait here if pause event is set
     while pause_event.is_set():
         time.sleep(1)
+
 # State changes to analysing the recorded audio clips
-def analyze_clips(loop_number, num_clips, test_audio_file):
+def analyze_clips(loop_number, num_clips):
     # Add the analysis code here (model)
     print(f"Analyzing {num_clips} clips from loop {loop_number}")
     time.sleep(15)  # Simulate time taken for analysis
-    for clip_number in range(1, num_clips + 1):
-        audio_file_path = os.path.join(output_folder, f'clip_{clip_number}.wav')
-
-        # Test the audio clip with the loaded model
-        result = test_audio_file(audio_file_path, loaded_rf_classifier, max_length=100)
-        
-        # Display the result for this clip
-        print(f"Clip {clip_number}: Predicted as {result}")
     print("Analysis done")
 
 def count_audio_files(output_folder):
@@ -123,9 +115,6 @@ if not os.path.exists(output_folder):
 samplerate = 48000
 record_sec = 5
 num_clips = 5
-
-model_filename = 'in_the_wild.joblib'
-loaded_rf_classifier = joblib.load(model_filename)
 
 # Define the update_timer function
 def update_timer(start_time):
