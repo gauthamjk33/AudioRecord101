@@ -210,8 +210,10 @@ def update_timer(start_time):
     current_datetime = current_time.strftime("Date: %Y-%m-%d Time: %H:%M:%S")
     return f"{formatted_time}\n{current_datetime}"
 
-
+window_title = "Fake Voice Alert"
+rediminds_logo = r'C:/Users/gauth/Realtimerecording3/Realtimerecording/RM-White-Transparent-Logo.png'
 layout = [
+    [sg.Image(rediminds_logo, size=(400, 200))],
     [sg.Text("Recording Status", text_color='green', font=('Helvetica', 18), key='status')],
     [sg.Text('', size=(40, 2), key='timer', justification='right')],
     [sg.Button("Start", size=(7, 1)), sg.Button("Pause", size=(7, 1)), sg.Button("Resume", size=(7, 1)),
@@ -219,8 +221,8 @@ layout = [
     [sg.Text(f'Clips set to {num_clips} clips', key='clip_count')]
 ]
 
-window = sg.Window("Fake Voice Alert", layout, finalize=True, return_keyboard_events=True,
-                   location=(150, 150), size=(500, 250))
+window = sg.Window(window_title, layout, finalize=True, return_keyboard_events=True,
+                   location=(150, 150), size=(600, 400))
 start_time = datetime.now()
 
 recording_thread_started = False
