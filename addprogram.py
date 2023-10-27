@@ -212,13 +212,15 @@ def update_timer(start_time):
 
 window_title = "Fake Voice Alert"
 rediminds_logo = r'C:/Users/gauth/Realtimerecording3/Realtimerecording/RM-White-Transparent-Logo.png'
+copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
 layout = [
     [sg.Image(rediminds_logo, size=(400, 200))],
     [sg.Text("Recording Status", text_color='green', font=('Helvetica', 18), key='status')],
     [sg.Text('', size=(40, 2), key='timer', justification='right')],
     [sg.Button("Start", size=(7, 1)), sg.Button("Pause", size=(7, 1)), sg.Button("Resume", size=(7, 1)),
      sg.Button("Exit", size=(7, 1)), sg.Button("Reset", size=(7, 1)), sg.Button("Edit", size=(7, 1))],
-    [sg.Text(f'Clips set to {num_clips} clips', key='clip_count')]
+    [sg.Text(f'Clips set to {num_clips} clips', key='clip_count')],
+    [sg.Text(copyright_text, justification='center', text_color='white')]
 ]
 
 window = sg.Window(window_title, layout, finalize=True, return_keyboard_events=True,
