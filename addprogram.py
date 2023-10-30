@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import threading
 from datetime import datetime
@@ -210,8 +211,57 @@ def update_timer(start_time):
     current_datetime = current_time.strftime("Date: %Y-%m-%d Time: %H:%M:%S")
     return f"{formatted_time}\n{current_datetime}"
 
+# Login screen layout
+
 window_title = "Fake Voice Alert"
-rediminds_logo = r'C:/Users/gauth/Realtimerecording3/Realtimerecording/RM-White-Transparent-Logo.png'
+rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
+copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
+
+login_layout = [
+    [sg.Image(rediminds_logo, size=(400, 200))],
+    [sg.Text('Username:'), sg.Input(size=(25, 1),key='-USERNAME-', enable_events=True)],
+    [sg.Text('Password:'), sg.Input(size=(25, 1),key='-PASSWORD-', password_char='*', enable_events=True)],
+    [sg.Button('Login')],
+    [sg.Text('', key='-LOGIN_MESSAGE-', text_color='red')],
+    [sg.Text(copyright_text, justification='center', text_color='white')]
+]
+
+# Create the login window
+login_window = sg.Window(window_title, login_layout)
+
+# Login credentials
+username = 'Admin'
+password = 'Admin@123'
+
+while True:
+    event_login, values_login = login_window.read()
+
+    if event_login == sg.WINDOW_CLOSED:
+        break # Break the loop first
+
+    if event_login == 'Login':
+        if values_login['-USERNAME-'] == username and values_login['-PASSWORD-'] == password:
+            notification.notify(
+                title="Login Status: Successful",
+                message="Welcome Administrator",
+                app_name="MyAudioApp"
+            )
+            break  # Breaks the loop when login is successful
+        else:
+            login_window['-LOGIN_MESSAGE-'].update('Login Credentials Invalid')
+            notification.notify(
+                title="Login Status: Failed",
+                message="Login attempt failed",
+                app_name="MyAudioApp"
+            )
+login_window.close()  # Close the window after breaking the loop
+
+if event_login == sg.WINDOW_CLOSED:  # If the window was closed without logging in
+    sys.exit()  # Exit the program
+
+#Continued GUI
+window_title = "Fake Voice Alert"
+rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
 copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
 layout = [
     [sg.Image(rediminds_logo, size=(400, 200))],
