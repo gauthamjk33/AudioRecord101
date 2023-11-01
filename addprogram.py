@@ -214,7 +214,7 @@ def update_timer(start_time):
 # Login screen layout
 
 window_title = "Fake Voice Alert"
-rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
+rediminds_logo = r'C:\Users\Saix2\PycharmProjects\ADDProgram\RM-White-Transparent-Logo.png'
 copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
 
 login_layout = [
@@ -223,12 +223,11 @@ login_layout = [
     [sg.Text('Password:'), sg.Input(size=(25, 1),key='-PASSWORD-', password_char='*', enable_events=True)],
     [sg.Button('Login')],
     [sg.Text('', key='-LOGIN_MESSAGE-', text_color='red')],
-    [sg.Text(copyright_text, justification='center', text_color='white')]
+    [sg.Text(copyright_text, justification='center', text_color='white')],
 ]
 
 # Create the login window
 login_window = sg.Window(window_title, login_layout)
-
 # Login credentials
 username = 'Admin'
 password = 'Admin@123'
@@ -236,8 +235,8 @@ password = 'Admin@123'
 while True:
     event_login, values_login = login_window.read()
 
-    if event_login == sg.WINDOW_CLOSED:
-        break # Break the loop first
+    if event_login == sg.WIN_CLOSED:
+        break  # Break the loop and exit the program
 
     if event_login == 'Login':
         if values_login['-USERNAME-'] == username and values_login['-PASSWORD-'] == password:
@@ -246,7 +245,8 @@ while True:
                 message="Welcome Administrator",
                 app_name="MyAudioApp"
             )
-            break  # Breaks the loop when login is successful
+            login_window.close()  # Close the login window
+            break  # Break the loop when login is successful
         else:
             login_window['-LOGIN_MESSAGE-'].update('Login Credentials Invalid')
             notification.notify(
@@ -254,15 +254,17 @@ while True:
                 message="Login attempt failed",
                 app_name="MyAudioApp"
             )
-login_window.close()  # Close the window after breaking the loop
 
-if event_login == sg.WINDOW_CLOSED:  # If the window was closed without logging in
-    sys.exit()  # Exit the program
 
+   # login_window.close()  # Close the window after breaking the loop
+
+    if event_login == sg.WINDOW_CLOSED:  # If the window was closed without logging in
+        sys.exit()# Exit the program
 #Continued GUI
 window_title = "Fake Voice Alert"
-rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
+rediminds_logo = r'C:\Users\Saix2\PycharmProjects\ADDProgram\RM-White-Transparent-Logo.png'
 copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
+print_output = []
 layout = [
     [sg.Image(rediminds_logo, size=(400, 200))],
     [sg.Text("Recording Status", text_color='green', font=('Helvetica', 18), key='status')],
@@ -270,16 +272,24 @@ layout = [
     [sg.Button("Start", size=(7, 1)), sg.Button("Pause", size=(7, 1)), sg.Button("Resume", size=(7, 1)),
      sg.Button("Exit", size=(7, 1)), sg.Button("Reset", size=(7, 1)), sg.Button("Edit", size=(7, 1))],
     [sg.Text(f'Clips set to {num_clips} clips', key='clip_count')],
-    [sg.Text(copyright_text, justification='center', text_color='white')]
+    [sg.Text(copyright_text, justification='center', text_color='white')],
+    [sg.Multiline(default_text='', size=(50, 15), key='-OUTPUT-', enable_events=True, reroute_cprint=True, autoscroll=True)],
+
 ]
 
 window = sg.Window(window_title, layout, finalize=True, return_keyboard_events=True,
-                   location=(150, 150), size=(600, 400))
+                   location=(150, 300), size=(600, 600))
 start_time = datetime.now()
 
 recording_thread_started = False
 pause_event = threading.Event()
+# Redirect print statements to the output element
+def custom_print(*args, **kwargs):
+    text = ' '.join(map(str, args))
+    print_output.append(text)
+    window['-OUTPUT-'].update('\n'.join(print_output))
 
+print = custom_print
 while True:
     event, values = window.read(timeout=1000)
 
