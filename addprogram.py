@@ -214,7 +214,7 @@ def update_timer(start_time):
 # Login screen layout
 
 window_title = "Fake Voice Alert"
-rediminds_logo = r'C:\Users\Saix2\PycharmProjects\ADDProgram\RM-White-Transparent-Logo.png'
+rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
 copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
 
 login_layout = [
@@ -262,7 +262,7 @@ while True:
         sys.exit()# Exit the program
 #Continued GUI
 window_title = "Fake Voice Alert"
-rediminds_logo = r'C:\Users\Saix2\PycharmProjects\ADDProgram\RM-White-Transparent-Logo.png'
+rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
 copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
 print_output = []
 layout = [
@@ -273,7 +273,7 @@ layout = [
      sg.Button("Exit", size=(7, 1)), sg.Button("Reset", size=(7, 1)), sg.Button("Edit", size=(7, 1))],
     [sg.Text(f'Clips set to {num_clips} clips', key='clip_count')],
     [sg.Text(copyright_text, justification='center', text_color='white')],
-    [sg.Multiline(default_text='', size=(50, 15), key='-OUTPUT-', enable_events=True, reroute_cprint=True, autoscroll=True)],
+    [sg.Multiline(default_text='', size=(50, 15), key='-OUTPUT-', enable_events=True, reroute_cprint=True, autoscroll=True, disabled=True)],
 
 ]
 
