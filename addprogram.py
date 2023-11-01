@@ -235,17 +235,16 @@ password = 'Admin@123'
 while True:
     event_login, values_login = login_window.read()
 
-    if event_login == sg.WIN_CLOSED:
-        break  # Break the loop and exit the program
+    if event_login == sg.WINDOW_CLOSED:
+        break  # Break the loop first
 
     if event_login == 'Login':
         if values_login['-USERNAME-'] == username and values_login['-PASSWORD-'] == password:
             notification.notify(
                 title="Login Status: Successful",
-                message="Welcome Administrator",
+                message="Login Successful, Welcome Administrator",
                 app_name="MyAudioApp"
             )
-            login_window.close()  # Close the login window
             break  # Break the loop when login is successful
         else:
             login_window['-LOGIN_MESSAGE-'].update('Login Credentials Invalid')
@@ -255,11 +254,12 @@ while True:
                 app_name="MyAudioApp"
             )
 
+login_window.close()  # Close the window after breaking the loop
 
-   # login_window.close()  # Close the window after breaking the loop
+if event_login == sg.WINDOW_CLOSED:  # If the window was closed without logging in
+    sys.exit()  # Exit the program
 
-    if event_login == sg.WINDOW_CLOSED:  # If the window was closed without logging in
-        sys.exit()# Exit the program
+
 #Continued GUI
 window_title = "Fake Voice Alert"
 rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
