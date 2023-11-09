@@ -214,7 +214,7 @@ def update_timer(start_time):
 # Login screen layout
 
 window_title = "Fake Voice Alert"
-rediminds_logo = r'"D:\dist\dist\RM-White-Transparent-Logo.png"'
+rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
 copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
 
 login_layout = [
@@ -262,7 +262,7 @@ if event_login == sg.WINDOW_CLOSED:  # If the window was closed without logging 
 
 #Continued GUI
 window_title = "Fake Voice Alert"
-rediminds_logo = r'"D:\dist\dist\RM-White-Transparent-Logo.png"'
+rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
 copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
 print_output = []
 layout = [
