@@ -7,6 +7,7 @@ from plyer import notification
 import soundcard as sc
 import soundfile as sf
 import PySimpleGUI as sg
+import PyInstaller
 
 # IMPORTS FOR MODEL PREDICTION
 import librosa
@@ -127,7 +128,7 @@ def analyze_clips(loop_number, num_clips, directory):
             notification.notify(
                 title="Audio Analysis Result: Clip Result",
                 message=f"Audio file {filename} in loop {loop_number} is {result}",
-                app_name="MyAudioApp"
+                app_name="MyAudioApp1"
             )
 
     time.sleep(15)  # Simulate time taken for analysis
@@ -158,14 +159,14 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
         notification.notify(
             title="Audio Recording Status: Recording Completed",
             message=f"Loop number {loop_number} completed",
-            app_name="MyAudioApp"
+            app_name="MyAudioApp1"
         )
 
         window['status'].update(f'Recordings from loop {loop_number} analyzing', text_color='yellow')
         notification.notify(
             title="Audio Recording Status: Analyzing",
             message=f"{num_clips} clips from loop {loop_number} being analyzed",
-            app_name="MyAudioApp"
+            app_name="MyAudioApp1"
         )
 
         analyze_clips(loop_number, num_clips, output_folder)
@@ -174,7 +175,7 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
         notification.notify(
             title="Audio Recording Status: Analysis Complete",
             message="Analysis done",
-            app_name="MyAudioApp"
+            app_name="MyAudioApp1"
 
         )
 
@@ -184,7 +185,7 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
         notification.notify(
             title="Analysis Result: Complete Loop",
             message=f"Analysis for loop {loop_number} is complete. {num_audio_files} audio files recorded and results have been provided.",
-            app_name="MyAudioApp"
+            app_name="MyAudioApp1"
         )
         num_audio_files = count_audio_files(output_folder)
         print(f"Number of audio files in recorded in loop {loop_number}: {num_audio_files}.")
@@ -192,7 +193,7 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
         loop_number += 1
 
 
-output_folder = os.path.expanduser('~/MyAudioApp/Audio')
+output_folder = os.path.expanduser('~/MyAudioApp/Audio1')
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
@@ -214,7 +215,7 @@ def update_timer(start_time):
 # Login screen layout
 
 window_title = "Fake Voice Alert"
-rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
+rediminds_logo = "RM-White-Transparent-Logo.png"
 copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
 
 login_layout = [
@@ -243,7 +244,7 @@ while True:
             notification.notify(
                 title="Login Status: Successful",
                 message="Login Successful, Welcome Administrator",
-                app_name="MyAudioApp"
+                app_name="MyAudioApp1"
             )
             break  # Break the loop when login is successful
         else:
@@ -251,7 +252,7 @@ while True:
             notification.notify(
                 title="Login Status: Failed",
                 message="Login attempt failed",
-                app_name="MyAudioApp"
+                app_name="MyAudioApp1"
             )
 
 login_window.close()  # Close the window after breaking the loop
@@ -262,7 +263,7 @@ if event_login == sg.WINDOW_CLOSED:  # If the window was closed without logging 
 
 #Continued GUI
 window_title = "Fake Voice Alert"
-rediminds_logo = r'C:\Users\huzpa\PycharmProjects\AudioRecord101\RM-White-Transparent-Logo.png'
+rediminds_logo = "RM-White-Transparent-Logo.png"
 copyright_text = "Copyright © 2023 RediMinds, Inc. All rights reserved."
 print_output = []
 layout = [
@@ -302,7 +303,7 @@ while True:
         notification.notify(
             title="Application Status: Close",
             message="Application closed",
-            app_name="MyAudioApp"
+            app_name="MyAudioApp1"
         )
         break
 
@@ -321,7 +322,7 @@ while True:
         notification.notify(
             title="Audio Recording Status: Paused",
             message="Recording process paused",
-            app_name="MyAudioApp"
+            app_name="MyAudioApp1"
         )
 
         pause_event.set()
@@ -333,7 +334,7 @@ while True:
         notification.notify(
             title="Audio Recording Status: Resumed",
             message="Recording process resumed",
-            app_name="MyAudioApp"
+            app_name="MyAudioApp1"
         )
 
         pause_event.clear()
@@ -343,7 +344,7 @@ while True:
         notification.notify(
             title="Audio Recording Status: Reset",
             message="Application reset successful",
-            app_name="MyAudioApp"
+            app_name="MyAudioApp1"
         )
         recording_thread_started = False
         pause_event.set()
@@ -365,7 +366,7 @@ while True:
                     notification.notify(
                         title="Audio Recording Status: Edit Clips",
                         message="Changes saved",
-                        app_name="MyAudioApp"
+                        app_name="MyAudioApp1"
                     )
                 except ValueError:
                     sg.popup('Please enter an integer value')
