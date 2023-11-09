@@ -236,7 +236,7 @@ while True:
     event_login, values_login = login_window.read()
 
     if event_login == sg.WINDOW_CLOSED:
-        break  # Break the loop first
+        sys.exit(0)  # Break the loop first
 
     if event_login == 'Login':
         if values_login['-USERNAME-'] == username and values_login['-PASSWORD-'] == password:
@@ -257,7 +257,7 @@ while True:
 login_window.close()  # Close the window after breaking the loop
 
 if event_login == sg.WINDOW_CLOSED:  # If the window was closed without logging in
-    sys.exit()  # Exit the program
+    sys.exit(0)  # Exit the program
 
 
 #Continued GUI
