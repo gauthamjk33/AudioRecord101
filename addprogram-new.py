@@ -281,6 +281,8 @@ def custom_print(*args, **kwargs):
     window['-OUTPUT-'].update('\n'.join(print_output))
 
 print = custom_print
+
+exit_confirmed = False
 while True:
     event, values = window.read(timeout=1000)
 
