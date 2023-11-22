@@ -284,6 +284,12 @@ print = custom_print
 while True:
     event, values = window.read(timeout=1000)
 
+    if event == sg.WINDOW_CLOSED and not exit_confirmed:
+        if sg.popup_yes_no('Are you sure you want to exit?') == 'Yes':
+            sys.exit(0)
+        else:
+            continue
+
     if event == sg.WIN_CLOSED or event == 'Exit':
         window['status'].update('Recording has ended', text_color='red')
         time.sleep(5)
@@ -295,7 +301,7 @@ while True:
             message="Application closed",
             app_name="MyAudioApp1"
         )
-        break
+        sys.exit(0)
 
     if event == 'Start' and not recording_thread_started:
         window['status'].update('Recording in progress', text_color='green')
