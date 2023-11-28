@@ -190,12 +190,12 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
         # Display the result notification with the number of audio files
         notification.notify(
             title="Analysis Result: Complete Loop",
-            message=f"Analysis for loop {loop_number} is complete. {num_audio_files} audio files recorded. Majority of audio files are {majority_result}",
+            message=f"Analysis for loop {loop_number} is complete. {num_audio_files} audio files recorded. \nMajority of audio files are {majority_result}",
             app_name="MyAudioApp1"
         )
         num_audio_files = count_audio_files(output_folder)
         print(
-            f"Number of audio files in recorded in loop {loop_number}: {num_audio_files}. Majority of audio files are {majority_result}")
+            f"Number of audio files in recorded in loop {loop_number}: {num_audio_files}. \nMajority of audio files are {majority_result}")
 
         loop_number += 1
 
