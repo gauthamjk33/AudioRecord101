@@ -80,7 +80,7 @@ def preprocess_data(file_path, max_time_steps=109, sample_rate=22050, duration=3
 def makePrediction(audio_file_path, model_file, max_time_steps):
     mel_spectrogram = preprocess_data(audio_file_path, max_time_steps=max_time_steps)
 
-    #reshaping the spectrogram 
+    #reshaping the spectrogram
     input_data = np.expand_dims(mel_spectrogram, axis=0)
 
     result = ''
@@ -109,6 +109,7 @@ def analyze_clips(loop_number, num_clips, directory):
     audio_samples = []
     bonafide_count = 0
     spoof_count = 0
+
     for filename in os.listdir(directory):
         if filename.endswith('.wav'):
             file_path = f"{directory}/{filename}"
@@ -120,28 +121,25 @@ def analyze_clips(loop_number, num_clips, directory):
             print(f"Audio file is {result}")
             audio_samples.append(filename)
 
-            # Determine the majority result
-            if bonafide_count > spoof_count:
-                majority_result = "BONAFIDE"
-            elif spoof_count > bonafide_count:
-                majority_result = "SPOOFED"
-            else:
-                majority_result = "INCONCLUSIVE"
+    # Determine the majority result after processing all files
+    if bonafide_count > spoof_count:
+        majority_result = "BONAFIDE"
+    elif spoof_count > bonafide_count:
+        majority_result = 'SPOOFED'
+    else:
+        majority_result = "INCONCLUSIVE"
 
+    # Display the result in a notification and in the log
+    notification.notify(
+        title="Audio Analysis Result: Majority Result",
+        message=f"Majority of audio files in loop {loop_number} are {majority_result}",
+        app_name="MyAudioApp1"
+    )
+    print(f"Majority of audio files in loop {loop_number} are {majority_result}")
 
-
-                # Display the result in a notification and in the log
-                notification.notify(
-                    title="Audio Analysis Result: Majority Result",
-                    message=f"Majority of audio files in loop {loop_number} are {majority_result}",
-                    app_name="MyAudioApp1"
-                )
-                print(f"Majority of audio files in loop {loop_number} are {majority_result}")
-
-                time.sleep(15)  # Simulate time taken for analysis
-                print(f"Analysis done")
-                return majority_result
-
+    time.sleep(15)  # Simulate time taken for analysis
+    print(f"Analysis done")
+    return majority_result
 
 # Work Left ----> Getting the Result as notification
 
@@ -207,9 +205,9 @@ output_folder = os.path.expanduser('~/MyAudioApp/Audio1')
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-samplerate = 48000
-record_sec = 2
-num_clips = 32
+samplerate = 22050
+record_sec = 5
+num_clips = 5
 
 
 # Define the update_timer function
