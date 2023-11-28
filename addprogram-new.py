@@ -93,7 +93,7 @@ def makePrediction(audio_file_path, model_file, max_time_steps):
     if (prediction[0][1] > threshold):
         result = "BONAFIDE"
     else:
-        result = "SPOOF"    
+        result = "SPOOF"
 
     return result
 
@@ -107,22 +107,40 @@ def analyze_clips(loop_number, num_clips, directory):
     model = tf.keras.models.load_model('basic_resnet.h5')
     print(f"Analyzing {num_clips} clips from loop {loop_number}")
     audio_samples = []
+    bonafide_count = 0
+    spoof_count = 0
     for filename in os.listdir(directory):
         if filename.endswith('.wav'):
             file_path = f"{directory}/{filename}"
             result = makePrediction(file_path, model, max_time_steps=109)
+            if result == "BONAFIDE":
+                bonafide_count += 1
+            else:
+                spoof_count += 1
             print(f"Audio file is {result}")
             audio_samples.append(filename)
 
-            # Display the result directly in a notification message
-            notification.notify(
-                title="Audio Analysis Result: Clip Result",
-                message=f"Audio file {filename} in loop {loop_number} is {result}",
-                app_name="MyAudioApp1"
-            )
+            # Determine the majority result
+            if bonafide_count > spoof_count:
+                majority_result = "BONAFIDE"
+            elif spoof_count > bonafide_count:
+                majority_result = "SPOOFED"
+            else:
+                majority_result = "INCONCLUSIVE"
 
-    time.sleep(15)  # Simulate time taken for analysis
-    print(f"Analysis done")
+
+
+                # Display the result in a notification and in the log
+                notification.notify(
+                    title="Audio Analysis Result: Majority Result",
+                    message=f"Majority of audio files in loop {loop_number} are {majority_result}",
+                    app_name="MyAudioApp1"
+                )
+                print(f"Majority of audio files in loop {loop_number} are {majority_result}")
+
+                time.sleep(15)  # Simulate time taken for analysis
+                print(f"Analysis done")
+                return majority_result
 
 
 # Work Left ----> Getting the Result as notification
@@ -159,7 +177,7 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
             app_name="MyAudioApp1"
         )
 
-        analyze_clips(loop_number, num_clips, output_folder)
+        majority_result= analyze_clips(loop_number, num_clips, output_folder)
 
         window['status'].update('Analysis done', text_color='green')
         notification.notify(
@@ -174,11 +192,12 @@ def record_audio_batch(output_folder, samplerate, record_sec, num_clips, pause_e
         # Display the result notification with the number of audio files
         notification.notify(
             title="Analysis Result: Complete Loop",
-            message=f"Analysis for loop {loop_number} is complete. {num_audio_files} audio files recorded and results have been provided.",
+            message=f"Analysis for loop {loop_number} is complete. {num_audio_files} audio files recorded. Majority of audio files are {majority_result}",
             app_name="MyAudioApp1"
         )
         num_audio_files = count_audio_files(output_folder)
-        print(f"Number of audio files in recorded in loop {loop_number}: {num_audio_files}.")
+        print(
+            f"Number of audio files in recorded in loop {loop_number}: {num_audio_files}. Majority of audio files are {majority_result}")
 
         loop_number += 1
 
