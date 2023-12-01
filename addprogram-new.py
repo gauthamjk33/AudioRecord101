@@ -303,7 +303,6 @@ exit_confirmed = False
 while True:
     event, values = window.read(timeout=1000)
 
-
     if event == sg.WIN_CLOSED or event == 'Exit':
         if not exit_confirmed:
             confirm_layout = [
@@ -320,7 +319,11 @@ while True:
 
             exit_confirmed = True
             confirm_window.close()
-        window['status'].update('Recording has ended', text_color='red')
+        try:
+            window['status'].update('Recording has ended', text_color='red')
+        except Exception as e:
+            sys.exit(0)
+
         time.sleep(5)
         window['status'].update('Analysing the recorded clips', text_color='red')
 
@@ -400,6 +403,6 @@ while True:
 
     # Call update_timer and update the timer field
     window['timer'].update(update_timer(start_time))
-
 window.close()
+
 
